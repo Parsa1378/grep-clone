@@ -1,9 +1,10 @@
 use std::env;
+use std::path::{PathBuf};
 
 // thread should be added
 pub struct Argument {
     pub pattern: String,
-    pub files: Vec<String>,
+    pub files: Vec<PathBuf>,
     pub ln: bool,
     pub depth: Option<usize>,
     pub invert_match: bool,
@@ -11,9 +12,8 @@ pub struct Argument {
 
 pub fn parse_argument() -> Argument{
     let args:Vec<String> = env::args().collect();
-    println!("first {}",args[1]);
     let mut pattern = String::new();
-    let mut files:Vec<String> = Vec::new();
+    let mut files:Vec<PathBuf> = Vec::new();
     let mut ln = false;
     let mut depth:Option<usize> = None;
     let mut invert_match = false;
@@ -38,7 +38,7 @@ pub fn parse_argument() -> Argument{
                 if pattern.is_empty() {
                     pattern = arg.to_owned();
                 } else {
-                    files.push(arg.to_owned());
+                    files.push(PathBuf::from(arg));
                 }
             }
         }
