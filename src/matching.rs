@@ -14,10 +14,13 @@ fn search_pattern_file(pattern: &str, file: &Path, ln:bool, invert_match:bool) {
         for(line_number, line) in lines.enumerate() {
             let pattern_found = regex.is_match(line);
             if (!invert_match && pattern_found) || (invert_match && !pattern_found) {
+                let colored_line = regex.replace_all(line, |caps: &regex::Captures| {
+                    format!("\x1B[32m{}\x1B[0m", caps.get(0).unwrap().as_str())
+                });
                 if ln {
-                    println!("{}:{}: {}", file.display(), line_number + 1, line)
+                    println!("{}:{}: {}", file.display(), line_number + 1, colored_line)
                 } else {
-                    print!("{}: {}",file.display(), line);
+                    print!("{}: {}",file.display(), colored_line);
                 }
             }
         }
@@ -78,11 +81,3 @@ pub fn search(args:Argument) {
         }
     }
 }
-
-        
-        
-        // fn search_thread(rx: Arc<Mutex<mpsc::Receiver<PathBuf>>>, pattern: &str, ln: bool, invert_match: bool) {
-        //     while let Ok(file) = rx.lock().unwrap().recv() {
-        //         search_pattern_file(pattern, &file, ln, invert_match);
-        //     }
-        // }
