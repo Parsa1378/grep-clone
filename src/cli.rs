@@ -1,7 +1,6 @@
 use std::env;
 use std::path::{PathBuf};
 
-// thread should be added
 pub struct Argument {
     pub pattern: String,
     pub files: Vec<PathBuf>,

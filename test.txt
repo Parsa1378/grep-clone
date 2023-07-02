@@ -16,9 +16,9 @@ Praesent id mi in ipsum rhoncus consectetur. Duis dignissim, velit ut tincidunt 
 Pellentesque venenatis magna libero. In lobortis tortor vitae ipsum bibendum convallis. Nulla ut nulla sed nisi euismod rutrum at sit amet metus. Nam hendrerit dui vel malesuada tempor. Integer tempor fringilla eleifend. Mauris molestie eleifend viverra. 
 Nunc aliquam et libero a feugiat. Phasellus ornare massa lectus, lobortis tempus eros rhoncus ut. Quisque congue mi sed risus auctor gravida. Morbi egestas mauris id sollicitudin mattis.
 In et mi posuere, posuere mauris ut, ornare orci. Etiam laoreet mattis lacus. Aliquam a lacus nibh. Ut laoreet velit risus, sed imperdiet nisi gravida ac. Nam cursus lacinia justo sit amet mollis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
-Vivamus consequat magna nec feugiat dapibus. Donec mattis, sem et aliquam malesuada, lorem elit facilisis tortor, scelerisque auctor dolor metus eu quam. Maecenas ultrices odio quam, sed pretium risus sollicitudin eu. Aenean id enim et enim cursus interdum.
+Vivamus consequat magna nec feugiat dapibus. Donec mattis, sem its et aliquam malesuada, lorem elit facilisis tortor, scelerisque auctor dolor metus eu quam. Maecenas ultrices odio quam, sed pretium risus sollicitudin eu. Aenean id enim et enim cursus interdum.
 No! All of the paragraphs in the generator are written by humans, not computers. When first building this generator we thought about using computers to generate the paragraphs, but they weren't very good and many times didn't make any sense at all. 
-We therefore took the time to create paragraphs specifically for this generator to make it the best that we could.
+We therefore took the it's time to create paragraphs specifically for this generator to make it the best that we could.
 Rhonda prided herself on always taking the path less traveled. 
 She'd decided to do this at an early age and had continued to do so throughout her entire life. It was a point of pride and she would explain to anyone who would listen that doing so was something that she'd made great efforts to always do. 
 She'd never questioned this decision until her five-year-old niece asked her, "So, is this why your life has been so difficult?" and Rhonda didn't have an answer for her.

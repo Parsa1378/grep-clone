@@ -5,12 +5,12 @@ use std::path::{Path};
 
 use crate::cli::Argument;
 
-fn search_pattern_file(pattern: &str, file: &Path, ln:bool, invert_match:bool, case_sensetive:bool) {
+fn search_pattern_file(pattern: &str, file: &Path, ln:bool, invert_match:bool, case_sensitive:bool) {
     if let Ok(content) = fs::read_to_string(file) {
         let lines = content.lines();
 
         let regex:Regex;
-        if case_sensetive {
+        if case_sensitive {
             regex = Regex::new(&format!(r"\b{}\b", pattern)).unwrap();
         } else {
             regex = Regex::new(&format!(r"(?i)\b{}\b", pattern)).unwrap();
@@ -25,7 +25,7 @@ fn search_pattern_file(pattern: &str, file: &Path, ln:bool, invert_match:bool, c
                 if ln {
                     println!("{}:{}: {}", file.display(), line_number + 1, colored_line)
                 } else {
-                    print!("{}: {}",file.display(), colored_line);
+                    println!("{}: {}",file.display(), colored_line);
                 }
             }
         }
