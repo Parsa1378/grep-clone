@@ -5,11 +5,16 @@ use std::path::{Path};
 
 use crate::cli::Argument;
 
-fn search_pattern_file(pattern: &str, file: &Path, ln:bool, invert_match:bool) {
+fn search_pattern_file(pattern: &str, file: &Path, ln:bool, invert_match:bool, case_sensetive:bool) {
     if let Ok(content) = fs::read_to_string(file) {
         let lines = content.lines();
 
-        let regex = Regex::new(&format!(r"\b{}\b", pattern)).unwrap();
+        let regex:Regex;
+        if case_sensetive {
+            regex = Regex::new(&format!(r"\b{}\b", pattern)).unwrap();
+        } else {
+            regex = Regex::new(&format!(r"(?i)\b{}\b", pattern)).unwrap();
+        }
 
         for(line_number, line) in lines.enumerate() {
             let pattern_found = regex.is_match(line);
@@ -29,7 +34,7 @@ fn search_pattern_file(pattern: &str, file: &Path, ln:bool, invert_match:bool) {
     }
 }
 
-fn search_pattern_directory(pattern: &str, dir: &Path, ln:bool, depth:usize, invert_match:bool) {
+fn search_pattern_directory(pattern: &str, dir: &Path, ln:bool, depth:usize, invert_match:bool, case_sensitive:bool) {
     if depth == 0 {
         return;
     }
@@ -42,11 +47,11 @@ fn search_pattern_directory(pattern: &str, dir: &Path, ln:bool, depth:usize, inv
                 if path.is_dir() {
                     let pattern_clone = pattern.to_owned();
                     let thread = thread::spawn(move || {
-                        search_pattern_directory(&pattern_clone, &path, ln, depth - 1, invert_match)
+                        search_pattern_directory(&pattern_clone, &path, ln, depth - 1, invert_match, case_sensitive)
                     });
                     threads.push(thread);
                 } else if path.is_file() {
-                    search_pattern_file(&pattern, &path, ln,invert_match);
+                    search_pattern_file(&pattern, &path, ln,invert_match,case_sensitive);
                 }
             }
         }
@@ -65,14 +70,14 @@ pub fn search(args:Argument) {
         return;
     }
     if args.files.len() == 1 && args.files[0].is_dir() {
-        search_pattern_directory(&args.pattern, &args.files[0], args.ln, args.depth.unwrap_or_default(), args.invert_match)
+        search_pattern_directory(&args.pattern, &args.files[0], args.ln, args.depth.unwrap_or_default(), args.invert_match,args.case_sensitive)
     } else {
         let files = args.files.clone();
         let mut threads:Vec<std::thread::JoinHandle<()>> = Vec::new();
         for file in files {
             let pattern_clone = args.pattern.to_owned();
             let thread = thread::spawn(move || {
-                search_pattern_file(&pattern_clone, &file, args.ln, args.invert_match);
+                search_pattern_file(&pattern_clone, &file, args.ln, args.invert_match, args.case_sensitive);
             });
             threads.push(thread);
         }

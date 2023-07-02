@@ -8,6 +8,7 @@ pub struct Argument {
     pub ln: bool,
     pub depth: Option<usize>,
     pub invert_match: bool,
+    pub case_sensitive:bool,
 } 
 
 pub fn parse_argument() -> Argument{
@@ -17,6 +18,7 @@ pub fn parse_argument() -> Argument{
     let mut ln = false;
     let mut depth:Option<usize> = None;
     let mut invert_match = false;
+    let mut case_sensitive = true;
 
     let mut i = 1;
     while i<args.len() {
@@ -31,8 +33,12 @@ pub fn parse_argument() -> Argument{
             }
 
             "-i" => {
-                invert_match = true;
+                case_sensitive = false;
             }
+
+            "-v" => {
+                invert_match = true;
+            }            
 
             arg => {
                 if pattern.is_empty() {
@@ -50,7 +56,8 @@ pub fn parse_argument() -> Argument{
         files,
         ln,
         depth,
-        invert_match
+        invert_match,
+        case_sensitive,
     }
 
 }
