@@ -1,5 +1,6 @@
 use std::fs;
 use regex::Regex;
+use std::thread;
 use std::path::{Path};
 
 use crate::cli::Argument;
@@ -30,29 +31,58 @@ fn search_pattern_directory(pattern: &str, dir: &Path, ln:bool, depth:usize, inv
         return;
     }
 
+    let mut threads:Vec<std::thread::JoinHandle<()>> = Vec::new();
     if let Ok(entries) = fs::read_dir(dir) {
         for entry in entries {
             if let Ok(entry) = entry {
                 let path = entry.path();
                 if path.is_dir() {
-                    search_pattern_directory(pattern, &path, ln, depth - 1, invert_match);
+                    let pattern_clone = pattern.to_owned();
+                    let thread = thread::spawn(move || {
+                        search_pattern_directory(&pattern_clone, &path, ln, depth - 1, invert_match)
+                    });
+                    threads.push(thread);
                 } else if path.is_file() {
-                    search_pattern_file(pattern, &path, ln,invert_match);
+                    search_pattern_file(&pattern, &path, ln,invert_match);
                 }
             }
         }
     } else {
         eprintln!("Failed to read file: {}", dir.display());
     }
+
+    for thread in threads {
+        thread.join().unwrap();
+    }
 }
 
-pub fn search(arg:Argument) {
-    if arg.files.len() == 1 && arg.files[0].is_dir() {
-        search_pattern_directory(&arg.pattern, &arg.files[0], arg.ln, arg.depth.unwrap_or_default(), arg.invert_match)
+pub fn search(args:Argument) {
+    if args.files.is_empty() {
+        println!("No files specified");
+        return;
+    }
+    if args.files.len() == 1 && args.files[0].is_dir() {
+        search_pattern_directory(&args.pattern, &args.files[0], args.ln, args.depth.unwrap_or_default(), args.invert_match)
     } else {
-        for file in &arg.files {
-            search_pattern_file(&arg.pattern, file, arg.ln, arg.invert_match)
+        let files = args.files.clone();
+        let mut threads:Vec<std::thread::JoinHandle<()>> = Vec::new();
+        for file in files {
+            let pattern_clone = args.pattern.to_owned();
+            let thread = thread::spawn(move || {
+                search_pattern_file(&pattern_clone, &file, args.ln, args.invert_match);
+            });
+            threads.push(thread);
+        }
+        for thread in threads {
+            thread.join().unwrap();
         }
     }
 }
 
+        
+        
+        // fn search_thread(rx: Arc<Mutex<mpsc::Receiver<PathBuf>>>, pattern: &str, ln: bool, invert_match: bool) {
+        //     while let Ok(file) = rx.lock().unwrap().recv() {
+        //         search_pattern_file(pattern, &file, ln, invert_match);
+        //     }
+        // }
